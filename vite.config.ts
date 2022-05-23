@@ -3,10 +3,8 @@
 import { dirname, relative } from 'path'
 import type { UserConfig } from 'vite'
 import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
+import solidPlugin from 'vite-plugin-solid'
 import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import WindiCSS from 'vite-plugin-windicss'
 import windiConfig from './windi.config'
@@ -23,11 +21,10 @@ export const sharedConfig: UserConfig = {
     __DEV__: isDev,
   },
   plugins: [
-    Vue(),
+    solidPlugin(),
 
     AutoImport({
       imports: [
-        'vue',
         {
           'webextension-polyfill': [
             ['*', 'browser'],
@@ -35,19 +32,6 @@ export const sharedConfig: UserConfig = {
         },
       ],
       dts: r('src/auto-imports.d.ts'),
-    }),
-
-    // https://github.com/antfu/unplugin-vue-components
-    Components({
-      dirs: [r('src/components')],
-      // generate `components.d.ts` for ts support with Volar
-      dts: r('src/components.d.ts'),
-      resolvers: [
-        // auto import icons
-        IconsResolver({
-          componentPrefix: '',
-        }),
-      ],
     }),
 
     // https://github.com/antfu/unplugin-icons
@@ -65,12 +49,7 @@ export const sharedConfig: UserConfig = {
   ],
   optimizeDeps: {
     include: [
-      'vue',
-      '@vueuse/core',
       'webextension-polyfill',
-    ],
-    exclude: [
-      'vue-demi',
     ],
   },
 }
